@@ -75,11 +75,85 @@ Idempotency means that multiple identical requests will have the same outcome. S
 Note that idempotency does not mean that the server has to respond in the same way on each request.
 
 ## 7 - How does HTTP Basic Authentication work ?
-## 8 - Define RestTemplate in Spring ?
-## 9 – What is the difference between @Controller and @RestController ?
-## 10 – What is DNS Spoofing ? How to prevent ?
-## 11 – What is content negotiation ?
-## 12 – What is statelessness in RESTful Web Services ?
-## 13 - What is CSRF attack? How to prevent ?
-## 14 - What are the core components of the HTTP request and HTTP response ?
+HTTP Basic Authentication requires that the server request a user name and password from the web client and verify that the user name and password are valid by comparing them against a database of authorized users. When basic authentication is declared, the following actions occur:
 
+- A client requests access to a protected resource.
+
+- The web server returns a dialog box that requests the user name and password.
+
+- The client submits the user name and password to the server.
+
+- The server authenticates the user in the specified realm and, if successful, returns the requested resource.
+
+![img_6.png](img_6.png)
+## 8 - Define RestTemplate in Spring ?
+Rest Template is used to create applications that consume RESTful Web Services.
+RestTemplate is a synchronous client to perform HTTP requests. It uses a simple, template method API over underlying HTTP client libraries such as the JDK HttpURLConnection, Apache HttpComponents, and others.
+
+## 9 – What is the difference between @Controller and @RestController ?
+![img_7.png](img_7.png)
+## 10 – What is DNS Spoofing ? How to prevent ?
+DNS (Domain Name Service) spoofing is the process of poisoning entries on a DNS server to redirect a targeted user to a malicious website under attacker control. The DNS attack typically happens in a public Wi-Fi environment but can occur in any situation where the attacker can poison ARP (Address Resolution Protocol) tables and force targeted user devices into using the attacker-controlled machine as the server for a specific website. It’s the first step in a sophisticated phishing attack on public Wi-Fi, and it can also trick users into installing malware on their devices or divulge sensitive information.
+
+Any user that accesses the internet from public Wi-Fi is vulnerable to DNS spoofing. To protect from DNS spoofing, internet providers can use DNSSEC (DNS security). When a domain owner sets up DNS entries, DNSSEC adds a cryptographic signature to the entries required by resolvers before they accept DNS lookups as authentic.
+
+Standard DNS is not encrypted, and it’s not programmed to ensure that changes and resolved lookups are from legitimate servers and users. DNSSEC adds a signature component to the process that verifies updates and ensures that DNS spoofing is blocked. DNSSEC has gained more popularity recently as DNS spoofing threatens to breach user data privacy across any public Wi-Fi.
+## 11 – What is content negotiation ?
+Content negotiation refers to mechanisms defined as a part of HTTP that make it possible to serve different versions of a document (or more generally, representations of a resource) at the same URI, so that user agents can specify which version fits their capabilities the best. One classical use of this mechanism is to serve an image in GIF or PNG format, so that a browser that cannot display PNG images (e.g. MS Internet Explorer 4) will be served the GIF version.
+
+A resource may be available in several different representations; for example, it might be available in different languages or different media types. One way of selecting the most appropriate choice is to give the user an index page and let them select the most appropriate choice; however it is often possible to automate the choice based on some selection criteria.
+## 12 – What is statelessness in RESTful Web Services ?
+As per the REST architecture, a RESTful Web Service should not keep a client state on the server. This restriction is called Statelessness. It is the responsibility of the client to pass its context to the server and then the server can store this context to process the client's further request. For example, session maintained by server is identified by session identifier passed by the client.
+
+RESTful Web Services should adhere to this restriction. We have seen this in the RESTful Web Services - Methods chapter, that the web service methods are not storing any information from the client they are invoked from.
+
+Consider the following URL −
+
+https://localhost:8080/UserManagement/rest/UserService/users/1
+```
+<user> 
+   <id>1</id> 
+   <name>mahesh</name> 
+   <profession>1</profession> 
+</user>
+````
+### Advantages of Statelessness
+
+- Web services can treat each method request independently.
+
+- Web services need not maintain the client's previous interactions. It simplifies the application design.
+
+- As HTTP is itself a statelessness protocol, RESTful Web Services work seamlessly with the HTTP protocols.
+### Disadvantages of Statelessness
+
+- Web services need to get extra information in each request and then interpret to get the client's state in case the client interactions are to be taken care of.
+## 13 - What is CSRF attack? How to prevent ?
+Cross-site Request Forgery, also known as CSRF, Sea Surf, or XSRF, is an attack whereby an attacker tricks a victim into performing actions on their behalf. The impact of the attack depends on the level of permissions that the victim has. Such attacks take advantage of the fact that a website completely trusts a user once it can confirm that the user is indeed who they say they are.
+
+Cross-site Request Forgery is considered a sleeping giant in the world of web application security. It is often not taken as seriously as it should even though it can prove to be a stealthy and powerful attack if executed properly. It is also a common attack, which is why it has secured a spot on the OWASP Top 10 list several times in a row. However, an exploited Cross-site Scripting vulnerability (XSS) is more of a risk than any CSRF vulnerability because CSRF attacks have a major limitation. CSRF only allows for state changes to occur and therefore the attacker cannot receive the contents of the HTTP response.
+
+Security experts propose many CSRF prevention mechanisms. This includes, for example, using a referer header, using the HttpOnly flag, sending an X-Requested-With custom header using jQuery, and more. Unfortunately, not all of them are effective in all scenarios. In some cases, they are ineffective and in other cases, they are difficult to implement in a particular application or have side effects. The following implementations prove to be effective for a variety of web apps while still providing protection against CSRF attacks.
+
+The most popular method to prevent Cross-site Request Forgery is to use a challenge token that is associated with a particular user and that is sent as a hidden value in every state-changing form in the web app. This token, called an anti-CSRF token (often abbreviated as CSRF token) or a synchronizer token, works as follows:
+
+- The web server generates a token and stores it
+- The token is statically set as a hidden field of the form
+- The form is submitted by the user
+- The token is included in the POST request data
+- The application compares the token generated and stored by the application with the token sent in the request
+- If these tokens match, the request is valid
+- If these tokens do not match, the request is invalid and is rejected
+
+This CSRF protection method is called the synchronizer token pattern. It protects the form against Cross-site Request Forgery attacks because an attacker would also need to guess the token to successfully trick a victim into sending a valid request. The token should also be invalidated after some time and after the user logs out. Anti-CSRF tokens are often exposed via AJAX: sent as headers or request parameters with AJAX requests.
+
+For an anti-CSRF mechanism to be effective, it needs to be cryptographically secure. The token cannot be easily guessed, so it cannot be generated based on a predictable pattern. We also recommend to use anti-CSRF options in popular frameworks such as AngularJS and refrain from creating own mechanisms, if possible. This lets you avoid errors and makes the implementation quicker and easier.
+## 14 - What are the core components of the HTTP request and HTTP response ?
+Whenever our client application wants to communicate to the server, it sends out a message to the server using HTTP Protocols, which is also termed as the HTTP Request. Based on that message, the server performs certain operations as demanded by the message and then replies to the client through a message, also knows as HTTP Response.
+![img_8.png](img_8.png)
+### Structure of HTTP Response
+As discussed above, the HTTP Response has a special structure that is followed so that the client can easily understand it. There exists a Universal Language that everybody follows so that there is no communication gap between people. HTTP Response broadly has 3 main components:
+
+- Status Line
+- Headers
+- Body (Optional)
+![img_9.png](img_9.png)
